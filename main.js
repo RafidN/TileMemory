@@ -15,8 +15,15 @@ function buildTile(color) {
     const element = document.createElement("div");
     element.classList.add("tile");
     element.setAttribute("data-color", color);
+    element.setAttribute("data-revealed", "false");
 
     element.addEventListener("click", () => {
+        const revealed = element.getAttribute("data-revealed");
+
+        if(awaitingEndOfMove || revealed === "true" || element === activeTile) 
+        {
+            return;
+        }
 
         // Make sure current turn has ended
         if(awaitingEndOfMove) { 
@@ -34,6 +41,8 @@ function buildTile(color) {
         const colorToMatch = activeTile.getAttribute("data-color");    
         // If colors match, reset activetile and awaitingendoftile
         if(colorToMatch === color) {
+            activeTile.setAttribute("data-revealed", "true");
+            element.setAttribute("data-revealed", "true");
             activeTile = null;
             awaitingEndOfMove = false;
             revealedCount+=2;
